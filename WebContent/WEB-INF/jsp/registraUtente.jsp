@@ -4,8 +4,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
+<head>
+<meta charset="UTF-8">
+<title>Registrazione Utente</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	
+</head>
+
  <body>
-  <form action="regUtente">
+  <form action="regUtente" method="post">
 	<table>
 	  
 		<tr height="50" align="center">
