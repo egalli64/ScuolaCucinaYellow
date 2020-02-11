@@ -60,7 +60,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 
 	}
 
-	/*
+	/**
 	 * cancellazione di un amministratore individuato attraverso il suo
 	 * idAmministratore. l'amministratore potrà essere cancellato solo se non legato
 	 * a nessun altro dato presente sul DB Se non esiste viene sollevata una
@@ -77,7 +77,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		}
 	}
 
-	/*
+	/**
 	 * lettura di tutti gli amministratori registrati
 	 */
 	@Override
