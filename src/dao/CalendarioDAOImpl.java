@@ -20,7 +20,7 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 		conn = SingletonConnection.getInstance();
 	}
 
-	/*
+	/**
 	 * registrazione di una nuova edizione nel calendario dei corsi
 	 */
 	@Override
@@ -46,7 +46,8 @@ public class CalendarioDAOImpl implements CalendarioDAO {
 	 */
 	@Override
 	public void delete(int idEdizione) throws SQLException{
-		// TODO Auto-generated method stub
+		PreparedStatement ps = conn.prepareStatement("DELETE FROM calendario WHERE id_edizione=?");
+ // TODO
 				
 	}
 

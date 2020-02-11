@@ -97,17 +97,21 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 			Utente iscritto = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, false);
 			UtentiEdizione.add(iscritto);
 			return UtentiEdizione;
-		}  else
+		} else
 			throw new SQLException("Edizione: " + idEdizione + " non ci sono iscritti a questa edizione!");
 	}
 
-	/*
+	/**
 	 * ritorna il numero di utenti iscritti ad una certa edizione
 	 */
 	@Override
 	public int getNumeroIscritti(int idEdizione) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement ps = conn.prepareStatement("SELECT COUNT(id_utente) FROM iscritti WHERE id_edizione=?");
+		ResultSet rs = ps.executeQuery();
+		int result = 0;
+		while (rs.next()) {
+			result++;
+		}
+		return result;
 	}
-
 }
