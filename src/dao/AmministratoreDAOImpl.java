@@ -19,13 +19,12 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		conn = SingletonConnection.getInstance();
 	}
 
-	/*
+	/**
 	 * registrazione di un nuovo amministratore. Se già presente si solleva una
 	 * eccezione
 	 */
 	@Override
 	public void insert(Utente amministratore) throws SQLException {
-
 		PreparedStatement ps = conn.prepareStatement(
 				"INSERT INTO amministratori(id_amministratore,password,nome,cognome,dataNascita,email,telefono) VALUES (?,?,?,?,?,?,?)");
 		ps.setString(1, amministratore.getIdUtente());
@@ -38,9 +37,9 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		ps.executeUpdate();
 	}
 
-	/*
-	 * modifica di tutti i dati di un amministratore. L'aministratore viene
-	 * individuato in base al idAmministratore Se non esiste viene sollevata una
+	/**
+	 * modifica di tutti i dati di un amministratore. L'amministratore viene
+	 * individuato in base all' idAmministratore Se non esiste viene sollevata una
 	 * eccezione
 	 */
 	@Override
@@ -73,9 +72,9 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		PreparedStatement ps = conn.prepareStatement("DELETE FROM amministratori WHERE id_amministratore=?");
 		ps.setString(1, idAmministratore);
 		int n = ps.executeUpdate();
-		if (n == 0)
+		if (n == 0) {
 			throw new SQLException("utente " + idAmministratore + " non presente");
-
+		}
 	}
 
 	/*
@@ -105,7 +104,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		return amministratori;
 	}
 
-	/*
+	/**
 	 * lettura dei dati di un singolo amministratore in base al suo idAmministratore
 	 * Se non presente si solleva una eccezione
 	 */

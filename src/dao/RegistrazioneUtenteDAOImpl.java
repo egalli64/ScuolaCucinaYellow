@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,14 +19,12 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 
 	Connection connection = null;
 
-
-
 	public RegistrazioneUtenteDAOImpl() throws ConnessioneException {
 		conn = SingletonConnection.getInstance();
 	}
 
-	/*
-	 * registrazione di un nuovo utente alla scuola di formazione se l'utente già
+	/**
+	 * registrazione di un nuovo utente alla scuola di formazione, se l'utente già
 	 * esiste si solleva una eccezione
 	 */
 	@Override
@@ -40,49 +39,101 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 		ps.setString(6, u.getEmail());
 		ps.setString(7, u.getTelefono());
 		ps.executeUpdate();
-		
 
 	}
 
-	/*
-	 * modifica di tutti i dati di un utente l'utente viene individuato dal suo
-	 * idUtente se l'utente non esiste si solleva una exception
+	/**
+	 * modifica di tutti i dati di un utente, l'utente viene individuato dal suo
+	 * idUtente, se l'utente non esiste si solleva una exception
 	 */
 	@Override
 	public void update(Utente u) throws SQLException {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = conn.prepareStatement(
+				"UPDATE registrati SET (password,nome,cognome,dataNascita,email,telefono) VALUES (?,?,?,?,?,?)");
+		ps.setString(2, u.getPassword());
+		ps.setString(3, u.getNome());
+		ps.setString(4, u.getCognome());
+		ps.setDate(5, new java.sql.Date(u.getDataNascita().getTime()));
+		ps.setString(6, u.getEmail());
+		ps.setString(7, u.getTelefono());
+		ps.executeUpdate();
 
 	}
 
-	/*
+	/**
 	 * cancellazione di un singolo utente l'utente si può cancellare solo se non è
-	 * correlato ad altri dati se l'utente non esiste o non è cancellabile si
+	 * correlato ad altri dati. se l'utente non esiste o non è cancellabile si
 	 * solleva una eccezione
 	 */
 	@Override
 	public void delete(String idUtente) throws SQLException {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = conn.prepareStatement("DELETE FROM registrati WHERE id_utente=?");
 
+		ps.setString(1, idUtente);
+		int n = ps.executeUpdate();
+		if (n == 0) {
+			throw new SQLException("utente " + idUtente + " non presente");
+		}
 	}
 
-	/*
+	/**
 	 * lettura di tutti gli utenti registrati se non ci sono utenti registrati il
 	 * metodo ritorna una lista vuota
 	 */
 	@Override
 	public ArrayList<Utente> select() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+
+		ArrayList<Utente> registrati = new ArrayList<Utente>();
+
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM registrati");
+
+		if (ps == null) {
+			return registrati;
+		}
+
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			String idUtente = rs.getString("id_utente");
+			String password = rs.getString("password");
+			String nome = rs.getString("nome");
+			String cognome = rs.getString("cognome");
+			Date dataNascita = rs.getDate("dataNascita");
+			String email = rs.getString("email");
+			String telefono = rs.getString("telefono");
+
+			Utente registrato = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, true);
+			registrati.add(registrato);
+		}
+		return registrati;
 	}
 
-	/*
+	/**
 	 * lettura dei dati di un singolo utente se l'utente non esiste si solleva una
 	 * eccezione
 	 */
 	@Override
 	public Utente select(String idUtente) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM registrati where id_utente =?");
+
+		ps.setString(1, idUtente);
+
+		ResultSet rs = ps.executeQuery();
+		Utente registrati = null;
+		if (rs.next()) {
+			String id = rs.getString("id_utente");
+			String password = rs.getString("password");
+			String nome = rs.getString("nome");
+			String cognome = rs.getString("cognome");
+			Date dataNascita = rs.getDate("dataNascita");
+			String email = rs.getString("email");
+			String telefono = rs.getString("telefono");
+
+			registrati = new Utente(id, password, nome, cognome, dataNascita, email, telefono, true);
+			return registrati;
+		} else
+			throw new SQLException("utente: " + idUtente + " non presente");
+
 	}
 
 }
