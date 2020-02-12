@@ -57,22 +57,25 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	@Override
 	public ArrayList<Edizione> selectIscrizioniUtente(String idUtente) throws SQLException {
 
-		ArrayList<Edizione> IscrizioniUtente = new ArrayList<Edizione>();
+		ArrayList<Edizione> result = new ArrayList<Edizione>();
+
 		PreparedStatement ps = conn.prepareStatement(
-				"SELECT id_edizione, id_corso, dataInizio, durata, aula, docente FROM registrati join iscritti using(id_utente) join calendario using (id_edizione)");
+				"SELECT id_edizione FROM registrati join iscritti using(id_utente) join calendario using (id_edizione) where id_utente=?");
+		ps.setString(1, idUtente); // risolve i punti di domanda (?) messi nella query
 		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
+
+		while (rs.next()) {
 			int idEdizione = rs.getInt("id_edizione");
 			int idCorso = rs.getInt("id_corso");
 			Date dataInizio = rs.getDate("dataInizio");
 			int durata = rs.getInt("durata");
 			String aula = rs.getString("aula");
 			String docente = rs.getString("docente");
+
 			Edizione iscritto = new Edizione(idEdizione, idCorso, dataInizio, durata, aula, docente);
-			IscrizioniUtente.add(iscritto);
-			return IscrizioniUtente;
-		} else
-			throw new SQLException("Utente: " + idUtente + " non iscritto a nessuna edizione!");
+			result.add(iscritto);
+		}
+		return result;
 	}
 
 	/**
@@ -82,11 +85,13 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	@Override
 	public ArrayList<Utente> selectUtentiPerEdizione(int idEdizione) throws SQLException {
 
-		ArrayList<Utente> UtentiEdizione = new ArrayList<Utente>();
+		ArrayList<Utente> result = new ArrayList<Utente>();
 		PreparedStatement ps = conn.prepareStatement(
-				"SELECT id_utente, password, nome, cognome, dataNascita, email, telefono FROM registrati join iscritti using(id_utente)");
-		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
+				"SELECT id_utente FROM registrati join iscritti using(id_utente) where id_edizione=?");
+		ps.setInt(1, idEdizione);
+		ResultSet rs = ps.executeQuery(); 
+		
+		while (rs.next()) {
 			String idUtente = rs.getString("id_utente");
 			String password = rs.getString("password");
 			String nome = rs.getString("name");
@@ -94,11 +99,11 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 			Date dataNascita = rs.getDate("dataNascita");
 			String email = rs.getString("email");
 			String telefono = rs.getString("telefono");
+			
 			Utente iscritto = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, false);
-			UtentiEdizione.add(iscritto);
-			return UtentiEdizione;
-		} else
-			throw new SQLException("Edizione: " + idEdizione + " non ci sono iscritti a questa edizione!");
+			result.add(iscritto);			
+		} 
+		return result;
 	}
 
 	/**
@@ -107,6 +112,7 @@ public class IscrizioneUtenteDAOImpl implements IscrizioneUtenteDAO {
 	@Override
 	public int getNumeroIscritti(int idEdizione) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement("SELECT COUNT(id_utente) FROM iscritti WHERE id_edizione=?");
+		ps.setInt(1, idEdizione);
 		ResultSet rs = ps.executeQuery();
 		int result = 0;
 		while (rs.next()) {

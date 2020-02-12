@@ -111,7 +111,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 	@Override
 	public Utente select(String idAmministratore) throws SQLException {
 
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM amministratori where id_amministratore =?");
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM amministratori where id_amministratore=?");
 
 		ps.setString(1, idAmministratore);
 

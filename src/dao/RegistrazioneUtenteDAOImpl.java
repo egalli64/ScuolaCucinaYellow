@@ -83,12 +83,12 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	@Override
 	public ArrayList<Utente> select() throws SQLException {
 
-		ArrayList<Utente> registrati = new ArrayList<Utente>();
+		ArrayList<Utente> result = new ArrayList<Utente>();
 
 		PreparedStatement ps = conn.prepareStatement("SELECT * FROM registrati");
 
 		if (ps == null) {
-			return registrati;
+			return result;
 		}
 
 		ResultSet rs = ps.executeQuery();
@@ -102,9 +102,9 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 			String telefono = rs.getString("telefono");
 
 			Utente registrato = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, true);
-			registrati.add(registrato);
+			result.add(registrato);
 		}
-		return registrati;
+		return result;
 	}
 
 	/**
@@ -114,13 +114,13 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	@Override
 	public Utente select(String idUtente) throws SQLException {
 
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM registrati where id_utente =?");
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM registrati where id_utente=?");
 
 		ps.setString(1, idUtente);
 
 		ResultSet rs = ps.executeQuery();
-		Utente registrati = null;
-		if (rs.next()) {
+		Utente result = null;
+		while (rs.next()) {
 			String id = rs.getString("id_utente");
 			String password = rs.getString("password");
 			String nome = rs.getString("nome");
@@ -129,11 +129,8 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 			String email = rs.getString("email");
 			String telefono = rs.getString("telefono");
 
-			registrati = new Utente(id, password, nome, cognome, dataNascita, email, telefono, true);
-			return registrati;
-		} else
-			throw new SQLException("utente: " + idUtente + " non presente");
-
+			result = new Utente(id, password, nome, cognome, dataNascita, email, telefono, true);
+		}
+		return result;
 	}
-
 }
