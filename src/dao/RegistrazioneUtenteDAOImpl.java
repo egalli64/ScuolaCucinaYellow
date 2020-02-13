@@ -49,7 +49,7 @@ public class RegistrazioneUtenteDAOImpl implements RegistrazioneUtenteDAO {
 	@Override
 	public void update(Utente u) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(
-				"UPDATE registrati SET (password,nome,cognome,dataNascita,email,telefono) VALUES (?,?,?,?,?,?)");
+				"UPDATE registrati SET password=?, nome=?, cognome=?, dataNascita=?, email=?, telefono=? where id_utente=?");
 		ps.setString(2, u.getPassword());
 		ps.setString(3, u.getNome());
 		ps.setString(4, u.getCognome());

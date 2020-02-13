@@ -5,28 +5,39 @@ import java.util.ArrayList;
 
 import dao.CatalogoDAO;
 import dao.CatalogoDAOImpl;
+import dao.CategoriaDAO;
+import dao.CategoriaDAOImpl;
+import dao.RegistrazioneUtenteDAOImpl;
 import dto.CorsoDTO;
 import entity.Categoria;
 import entity.Corso;
 import entity.Feedback;
+import entity.Utente;
 import exceptions.ConnessioneException;
 import exceptions.DAOException;
 
 public class CorsoServiceImpl implements CorsoService {
 
-	//dichiarare qui tutti i dao di cui si ha bisogno
+	// dichiarare qui tutti i dao di cui si ha bisogno
 	private CatalogoDAO daoC;
-	//... dichiarazione di altri DAO
-	
-	//costruire qui tutti i dao di cui si ha bisogno
-	public  CorsoServiceImpl() throws ConnessioneException{
+	private CategoriaDAO daoCat;
+	private CorsoDTO dtoC;
+//	private EdizioneDTO dtoE;
+
+	// costruire qui tutti i dao di cui si ha bisogno
+	public CorsoServiceImpl() throws ConnessioneException {
 		daoC = new CatalogoDAOImpl();
-		//... costruzione dei altri dao
+		daoCat = new CategoriaDAOImpl();
+		dtoC = new CorsoDTO();
+//		dtoE = new EdizioneDTO();
 	}
-	
-	/*
-	 * il metodo mostra tutti i corsi offerti dalla scuola 
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+
+	/**
+	 * @author ORIGINALE
+	 * 
+	 *         il metodo mostra tutti i corsi offerti dalla scuola se il metodo
+	 *         del/dei DAO invocati sollevano una eccezione, il metodo deve tornare
+	 *         una DAOException con all'interno l'exception originale
 	 */
 	@Override
 	public ArrayList<Corso> visualizzaCatalogoCorsi() throws DAOException {
@@ -34,45 +45,62 @@ public class CorsoServiceImpl implements CorsoService {
 			return daoC.select();
 		} catch (SQLException e) {
 			throw new DAOException("errore nel recuperare o leggere i dati", e);
-			
+
+		}
+	}
+
+	/**
+	 * @author DA CONTROLLARE il metodo mostra l'elenco dei corsi di una certa
+	 *         categoria dal catalogo se il metodo del/dei DAO invocati sollevano
+	 *         una eccezione, il metodo deve tornare una DAOException con
+	 *         all'interno l'exception originale
+	 */
+	@Override
+	public ArrayList<Corso> visualizzaCorsiPerCategoria(int idCategoria) throws DAOException {
+		try {
+			return daoC.select();
+		} catch (SQLException e) {
+			throw new DAOException("errore nella lettura dei corsi", e);
+		}
+	}
+
+	/**
+	 * @author COMPLETO lettura di tutte le categorie se i metodi del/dei DAO
+	 *         invocati sollevano una eccezione, il metodo deve tornare una
+	 *         DAOException con all'interno l'exception originale
+	 */
+	@Override
+	public ArrayList<Categoria> visualizzaCategorie() throws DAOException {
+		try {
+			return daoCat.select();
+		} catch (SQLException e) {
+			throw new DAOException("errore nella lettura delle categorie", e);
+		}
+	}
+
+	/**
+	 * @author COMPLETO il metodo (invocabile solo da un amministratore) crea una
+	 *         nuova categoria
+	 * 
+	 *         se i metodi del/dei DAO invocati sollevano una eccezione, il metodo
+	 *         deve tornare una DAOException con all'interno l'exception originale
+	 */
+	@Override
+	public void creaNuovaCategoria(String descrizione) throws DAOException {
+		try {
+			daoCat.insert(descrizione);
+		} catch (SQLException e) {
+			throw new DAOException("Non è stata creata nessuna categoria", e);
 		}
 	}
 
 	/*
-	 * il metodo mostra l'elenco dei corsi di una certa categorie
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale 
-	 */
-	@Override
-	public ArrayList<Corso> visualizzaCorsiPerCategoria(int idCategoria) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/*
-	 * lettura di tutte le categorie
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale 
-	 */
-	@Override
-	public ArrayList<Categoria> visualizzaCategorie() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/*
-	 * il metodo (invocabile solo da un amministratore) crea una nuova categoria
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
-	 */
-	@Override
-	public void creaNuovaCategoria(String descrizione) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * ritorna un oggetto CorsoDTO con tutti i dati di un singolo corso 
-	 * tutte le edizioni di quel corso con relativi feedbacks (classe EdizioneDTO)
-	 * il corso è individuato tramite idCorso
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+	 * un oggetto CorsoDTO con tutti i dati di un singolo corso tutte le edizioni di
+	 * quel corso con relativi feedbacks (classe EdizioneDTO) il corso è individuato
+	 * tramite idCorso
+	 * 
+	 * se i metodi del/dei DAO invocati sollevano una eccezione, il metodo deve
+	 * tornare una DAOException con all'interno l'exception originale
 	 */
 	@Override
 	public CorsoDTO visualizzaSchedaCorso(int idCorso) throws DAOException {
@@ -81,9 +109,10 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	/*
-	 * ritorna una lista con tutti i feedbacks relativi ad un corso 
-	 * il corso è individuato tramite idCorso
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+	 * ritorna una lista con tutti i feedbacks relativi ad un corso il corso è
+	 * individuato tramite idCorso se il metodi del/dei DAO invocati sollevano una
+	 * eccezione, il metodo deve tornare una DAOException con all'interno
+	 * l'exception originale
 	 */
 	@Override
 	public ArrayList<Feedback> visualizzaFeedbackCorso(int idCorso) throws DAOException {
@@ -92,8 +121,9 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	/*
-	 * modifica tutti i dati di un corso
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+	 * modifica tutti i dati di un corso se il metodi del/dei DAO invocati sollevano
+	 * una eccezione, il metodo deve tornare una DAOException con all'interno
+	 * l'exception originale
 	 */
 	@Override
 	public void modificaDatiCorso(Corso corso) throws DAOException {
@@ -102,8 +132,9 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	/*
-	 * inserisce un nuovo corso a catalogo (invocabile solo dall'amministratore)
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+	 * inserisce un nuovo corso a catalogo (invocabile solo dall'amministratore) se
+	 * il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve
+	 * tornare una DAOException con all'interno l'exception originale
 	 */
 	@Override
 	public void inserisciCorso(Corso corso) throws DAOException {
@@ -112,9 +143,10 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	/*
-	 * cancella un singolo corso dal catalogo dei corsi
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale 
-	 */ 
+	 * cancella un singolo corso dal catalogo dei corsi se il metodi del/dei DAO
+	 * invocati sollevano una eccezione, il metodo deve tornare una DAOException con
+	 * all'interno l'exception originale
+	 */
 	@Override
 	public void cancellaCorso(int codiceCorso) throws DAOException {
 		// TODO Auto-generated method stub
@@ -122,8 +154,9 @@ public class CorsoServiceImpl implements CorsoService {
 	}
 
 	/*
-	 * legge i dati di un singolo corso (senza edizioni)
-	 * se il metodi del/dei DAO invocati sollevano una eccezione, il metodo deve tornare una DAOException con all'interno l'exception originale
+	 * legge i dati di un singolo corso (senza edizioni) se il metodi del/dei DAO
+	 * invocati sollevano una eccezione, il metodo deve tornare una DAOException con
+	 * all'interno l'exception originale
 	 */
 	@Override
 	public Corso visualizzaCorso(int codiceCorso) throws DAOException {

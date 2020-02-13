@@ -35,6 +35,7 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 		ps.setString(6, amministratore.getEmail());
 		ps.setString(7, amministratore.getTelefono());
 		ps.executeUpdate();
+		
 	}
 
 	/**
@@ -127,9 +128,9 @@ public class AmministratoreDAOImpl implements AmministratoreDAO {
 			String telefono = rs.getString("telefono");
 
 			amministratore = new Utente(idUtente, password, nome, cognome, dataNascita, email, telefono, true);
-			return amministratore;
 		} else
 			throw new SQLException("amministratore: " + idAmministratore + " non presente");
+		return amministratore;
 	}
 
 	public static void main(String[] args) throws Exception {
