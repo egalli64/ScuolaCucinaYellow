@@ -1,0 +1,45 @@
+.colore {
+	background: #e2effe;
+	font-family: Cooper black;
+}
+
+.font-size {
+	font-size: 580%;
+}
+
+.colorebottoni {
+	background: #96d6fc;
+}
+
+.center {
+	text-align: center;
+}
+
+.style {
+	font-family: Cooper black;
+	font-size: 150%;
+}
+
+}
+.sfondo {
+	background-color: #e2effe;
+}
+
+body {
+	background-image: url(../img/homepage1.jpg);
+	background-size: 106%;
+}
+
+.colore2{
+	font-family: Cooper black;
+	color: #ffffff;
+	text-align: right;
+
+}
+
+
+div {
+  -webkit-text-fill-color: #000000;
+  size: 170%;
+}
+
