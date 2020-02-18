@@ -1,10 +1,11 @@
 .colore {
-	background: #e2effe;
+	background: #c0c0c0;
 	font-family: Cooper black;
 }
 
 .font-size {
 	font-size: 580%;
+
 }
 
 .colorebottoni {
@@ -22,24 +23,39 @@
 
 }
 .sfondo {
-	background-color: #e2effe;
+	background-color: #000000;
 }
 
 body {
-	background-image: url(../img/homepage1.jpg);
-	background-size: 106%;
+	background-size: 100% 100%;
+	background-image: url('../img/black.jpg');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+	background-size: 1920px 1080px;
+	
 }
 
-.colore2{
+.colore2 {
 	font-family: Cooper black;
 	color: #ffffff;
-	text-align: right;
-
+	text-align: left;
 }
 
 
-div {
-  -webkit-text-fill-color: #000000;
-  size: 170%;
+.menu {
+	font-family: Cooper black;
+	color: #000000;
+	font-size: 580%;
 }
 
+.bottonemenu{
+	background: #000000;
+	font-family: Cooper black;
+	color: #ffffff;
+	font-size: 170%;
+}
+
+.margine{
+	margin-top: 30%;
+}
